@@ -25,6 +25,8 @@ public class ClientTester extends Thread {
                 break;
             }
         }
+
+        sc.close();
     }
 
 }

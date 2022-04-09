@@ -2,17 +2,12 @@ import java.net.*;
 import java.io.*;
 
 class Session extends Thread {
-    // マネージャーのリストからセッションを消す時のためにidを持たせる。一意だったらなんでもいいので整数の連番で振っていく。
-    private static int idCount = 0;
-
     protected Socket socket;
     protected PrintWriter out;
     protected BufferedReader in;
     public int id;
 
     public Session(Socket socket) throws IOException {
-        this.id = idCount++;
-
         this.socket = socket;
         this.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
