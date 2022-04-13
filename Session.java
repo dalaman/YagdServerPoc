@@ -97,8 +97,6 @@ class Session extends Thread {
                 this.firstByte = buff[0]; // HACK: adhoc
 
                 sendHead[1] = (byte) line.getBytes("UTF-8").length;
-                this.os.write(sendHead);
-                this.os.write(line.getBytes("UTF-8"));
 
                 if (line.equals("END"))
                     break;
