@@ -33,9 +33,9 @@ public class SessionManager {
         }
     }
 
-    public static void updateText(String newText) {
-        SessionManager.model = newText;
-        SessionManager.notifyChangesToAllSession();
+    public synchronized static void updateText(String newText) {
+        Model.updateModel(newText);
+        notifyChangesToAllSession();
     }
 
     // HACK: make clean
@@ -43,7 +43,7 @@ public class SessionManager {
         // TODO 各SessionにModelが変わったことを通知する。
         for (Session session : sessionList) {
             try {
-                session.sendMessageToClient(SessionManager.model);
+                session.sendMessageToClient(Model.outputModel());
             } catch (UnsupportedEncodingException e) {
                 SessionManager.logging("Err: " + e);
             } catch (IOException e) {
@@ -63,9 +63,9 @@ public class SessionManager {
             while (true) {
                 Socket socket = serverSocket.accept();
                 SessionManager.logging("Connection accepted: " + socket);
-                Session newSession =
-                    new Session(socket, /* id= */ SessionManager.sessionList.size());
+                Session newSession = new Session(socket, /* id= */ SessionManager.sessionList.size());
                 sessionList.add(newSession);
+                newSession.sendMessageToClient(Model.outputModel());
             }
         } finally {
             serverSocket.close();
